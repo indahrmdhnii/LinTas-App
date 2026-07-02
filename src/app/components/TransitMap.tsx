@@ -4,12 +4,13 @@
  * with transit route overlays, stop markers, zoom in/out, and locate user.
  */
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import {
   MapContainer,
   TileLayer,
   Polyline,
   CircleMarker,
+  Marker,
   Tooltip,
   useMap,
 } from "react-leaflet";
@@ -44,7 +45,7 @@ export interface TransitMapProps {
   onStopSelect: (stop: LatLngStop) => void;
   modaColor: string;
   jakLingkoZones?: JakLingkoLatLngZone[];
-  bottomOffset?: number;  // height of bottom navbar, default 80
+  bottomOffset?: number; // height of bottom navbar, default 80
 }
 
 export interface JakLingkoLatLngZone {
@@ -79,6 +80,24 @@ const createCustomIcon = (color: string, selected: boolean) =>
     iconSize: [selected ? 22 : 14, selected ? 22 : 14],
     iconAnchor: [selected ? 11 : 7, selected ? 11 : 7],
   });
+
+// ─── User location icon ────────────────────────────────────────────────────────
+
+const userLocationIcon = L.divIcon({
+  html: `
+    <div style="
+      width: 18px;
+      height: 18px;
+      background: #007AFF;
+      border: 3px solid #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 0 0 5px rgba(0,122,255,0.25), 0 2px 8px rgba(0,0,0,0.4);
+    "></div>
+  `,
+  className: "",
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
 
 // ─── Map Controls Component ───────────────────────────────────────────────────
 
@@ -169,8 +188,25 @@ function MapController({
   useEffect(() => {
     zoomInRef.current = () => map.zoomIn(1);
     zoomOutRef.current = () => map.zoomOut(1);
+
+    // Fix: listen to locationfound so the button actually flies to real GPS position
+    const onLocationFound = (e: L.LocationEvent) => {
+      map.flyTo(e.latlng, 16, { duration: 0.8 });
+    };
+
+    map.on("locationfound", onLocationFound);
+
     locateRef.current = () => {
-      map.locate({ setView: true, maxZoom: 15 });
+      map.locate({
+        setView: false,         // we handle flyTo manually in locationfound
+        maxZoom: 16,
+        timeout: 20000,         // 20s — mobile GPS can be slow
+        enableHighAccuracy: true,
+      });
+    };
+
+    return () => {
+      map.off("locationfound", onLocationFound);
     };
   }, [map, zoomInRef, zoomOutRef, locateRef]);
 
@@ -196,6 +232,47 @@ function MapController({
   return null;
 }
 
+// ─── User Location Marker ──────────────────────────────────────────────────────
+
+/**
+ * Fix summary:
+ * 1. No longer pre-places marker at Jakarta center (-6.2088, 106.8456)
+ * 2. Uses Leaflet's map.locate() with watch:true for continuous live tracking
+ * 3. Marker only appears after real GPS position is received (locationfound event)
+ * 4. Properly cleans up watchPosition via map.stopLocate() on unmount
+ */
+function UserLocationMarker() {
+  const map = useMap();
+  const [userLatLng, setUserLatLng] = useState<L.LatLng | null>(null);
+
+  useEffect(() => {
+    const onLocationFound = (e: L.LocationEvent) => {
+      setUserLatLng(e.latlng);
+    };
+
+    // Start watching GPS — updates continuously as user moves
+    map.locate({
+      watch: true,              // continuous tracking (like watchPosition)
+      enableHighAccuracy: true, // use GPS chip on mobile, not IP fallback
+      timeout: 20000,           // 20s timeout for slow mobile GPS
+      maximumAge: 5000,         // accept cached position up to 5s old
+    });
+
+    map.on("locationfound", onLocationFound);
+    // locationerror: silently ignore — marker just won't show if denied
+
+    return () => {
+      map.stopLocate();           // clean up watchPosition on unmount
+      map.off("locationfound", onLocationFound);
+    };
+  }, [map]);
+
+  // Only render marker when we have a real GPS fix
+  if (!userLatLng) return null;
+
+  return <Marker position={userLatLng} icon={userLocationIcon} />;
+}
+
 // ─── Main TransitMap Component ────────────────────────────────────────────────
 
 export function TransitMap({
@@ -217,6 +294,9 @@ export function TransitMap({
 
   // Jakarta center
   const center: [number, number] = [-6.2088, 106.8456];
+
+  // suppress unused variable warning — createCustomIcon kept for future use
+  void createCustomIcon;
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
@@ -352,7 +432,7 @@ export function TransitMap({
             })
           )}
 
-        {/* ── User Location Marker ── */}
+        {/* ── User Location Marker (only shows after real GPS fix) ── */}
         <UserLocationMarker />
       </MapContainer>
 
@@ -387,48 +467,4 @@ export function TransitMap({
       `}</style>
     </div>
   );
-}
-
-// ─── User Location Marker ──────────────────────────────────────────────────────
-
-function UserLocationMarker() {
-  const map = useMap();
-  const markerRef = useRef<L.CircleMarker | null>(null);
-
-  useEffect(() => {
-    // Try to get user location on mount
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          if (markerRef.current) {
-            markerRef.current.setLatLng([latitude, longitude]);
-          }
-        },
-        () => {
-          // Silently fall back to Jakarta center if denied
-        },
-        { timeout: 5000 }
-      );
-    }
-
-    // Create the pulsing user location marker
-    const userMarker = L.circleMarker([-6.2088, 106.8456], {
-      radius: 8,
-      fillColor: "#1A6FBF",
-      fillOpacity: 1,
-      color: "#FFFFFF",
-      weight: 2.5,
-      className: "user-location-marker",
-    });
-
-    userMarker.addTo(map);
-    markerRef.current = userMarker;
-
-    return () => {
-      userMarker.remove();
-    };
-  }, [map]);
-
-  return null;
 }
