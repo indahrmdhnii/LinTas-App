@@ -62,7 +62,7 @@ export function EditProfileScreen() {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 20 }}>
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
         {/* Avatar */}
         <div
           style={{

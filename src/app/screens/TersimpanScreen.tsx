@@ -227,7 +227,7 @@ export function TersimpanScreen() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 80 }}>
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
 
         {/* ── Add / Edit form ───────────────────────────────────────────── */}
         <AnimatePresence>
@@ -236,7 +236,7 @@ export function TersimpanScreen() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              style={{ overflow: "hidden", paddingTop: 16 }}
+              style={{ paddingTop: 16 }}
             >
               <LocationForm
                 initial={editingLoc ?? undefined}

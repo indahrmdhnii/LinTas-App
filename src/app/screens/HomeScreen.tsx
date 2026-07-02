@@ -61,7 +61,7 @@ export function HomeScreen() {
       {isGuest && <GuestModeBanner />}
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 80 }}>
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
         {/* Header */}
         <div style={{ padding: "16px 20px 0" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

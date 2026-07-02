@@ -134,7 +134,7 @@ export function StationScreen() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", paddingBottom: 80 }}>
+      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", paddingBottom: 120 }}>
         {/* Header row */}
         <div style={{ padding: "20px 20px 0" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>

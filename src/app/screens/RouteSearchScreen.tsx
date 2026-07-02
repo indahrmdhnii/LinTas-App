@@ -145,7 +145,7 @@ export function RouteSearchScreen() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", paddingBottom: 80 }}>
+      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", paddingBottom: 120 }}>
         {/* Autocomplete */}
         <AnimatePresence>
           {showSuggestions && (

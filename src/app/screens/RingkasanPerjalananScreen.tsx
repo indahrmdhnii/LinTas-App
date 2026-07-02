@@ -11,7 +11,7 @@ export function RingkasanPerjalananScreen() {
       className="h-full flex flex-col"
       style={{ backgroundColor: "#F7F7F5", fontFamily: "'Poppins', sans-serif" }}
     >
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
         {/* Hero section */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}

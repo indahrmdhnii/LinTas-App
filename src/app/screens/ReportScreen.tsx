@@ -340,7 +340,7 @@ export function ReportScreen() {
         </h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", padding: "20px 20px 40px" }}>
+      <div className="flex-1 overflow-y-auto" style={{ backgroundColor: "#F7F7F5", padding: "20px 20px 120px" }}>
 
         {/* Report type grid */}
         <p style={{ fontSize: 13, fontWeight: 500, color: "#8E8E93", textTransform: "uppercase", letterSpacing: 1, margin: "0 0 12px" }}>

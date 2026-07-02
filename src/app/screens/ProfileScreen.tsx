@@ -72,7 +72,7 @@ export function ProfileScreen() {
       className="h-full flex flex-col"
       style={{ backgroundColor: "#F7F7F5", fontFamily: "'Poppins', sans-serif" }}
     >
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 80 }}>
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
         {/* Profile header */}
         <div
           style={{
