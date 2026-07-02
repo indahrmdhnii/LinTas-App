@@ -111,7 +111,7 @@ export function DetailRouteScreen() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 96 }}>
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
         {/* Summary card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -181,7 +181,6 @@ export function DetailRouteScreen() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                style={{ overflow: "hidden" }}
               >
                 <div style={{
                   backgroundColor: "#FFFFFF", borderRadius: 16, padding: 16,
@@ -292,7 +291,6 @@ export function DetailRouteScreen() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                style={{ overflow: "hidden" }}
               >
                 <div style={{
                   backgroundColor: "#FFFFFF", borderRadius: 16, padding: 16,
@@ -423,7 +421,6 @@ export function DetailRouteScreen() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                style={{ overflow: "hidden" }}
               >
                 <div style={{ position: "relative" }}>
                   {route.steps.map((step, i) => {
