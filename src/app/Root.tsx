@@ -21,7 +21,9 @@ export function Root() {
     >
       <NetworkStatusBanner />
 
-      {/* Page content — fills remaining height; screens use h-full against this */}
+      {/* Page content — fills remaining height; screens use h-full against this.
+          NOTE: overflow must NOT be "hidden" here or touch-scroll on child
+          flex-1 overflow-y-auto containers will be blocked on iOS Safari. */}
       <div
         style={{
           flex: 1,
@@ -29,7 +31,9 @@ export function Root() {
           display: "flex",
           flexDirection: "column",
           position: "relative",
-          overflow: "hidden",
+          overflowX: "hidden",
+          // overflowY intentionally left unset (visible) so that each screen's
+          // own overflow-y-auto scroll container handles scrolling correctly
         }}
       >
         <Outlet />

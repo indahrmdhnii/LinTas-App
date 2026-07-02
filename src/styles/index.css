@@ -30,3 +30,9 @@ body {
   width: 0px;
   background: transparent;
 }
+
+/* Pastikan scroll touch (momentum scroll) berfungsi di iOS Safari */
+.overflow-y-auto,
+.overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+}
