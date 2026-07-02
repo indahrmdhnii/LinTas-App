@@ -36,3 +36,8 @@ body {
 .overflow-y-scroll {
   -webkit-overflow-scrolling: touch;
 }
+
+/* Padding bawah aman: bottom bar (~140px) + iOS safe area + buffer */
+.pb-safe-scroll {
+  padding-bottom: calc(180px + env(safe-area-inset-bottom, 0px));
+}

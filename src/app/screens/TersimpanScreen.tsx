@@ -227,7 +227,7 @@ export function TersimpanScreen() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
+      <div className="flex-1 overflow-y-auto pb-safe-scroll">
 
         {/* ── Add / Edit form ───────────────────────────────────────────── */}
         <AnimatePresence>

@@ -284,7 +284,7 @@ export function NavigationScreen() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
+      <div className="flex-1 overflow-y-auto pb-safe-scroll">
         {/* ETA Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -111,7 +111,7 @@ export function DetailRouteScreen() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 120 }}>
+      <div className="flex-1 overflow-y-auto pb-safe-scroll">
         {/* Summary card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
