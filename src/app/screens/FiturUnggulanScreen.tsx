@@ -1020,7 +1020,7 @@ export function FiturUnggulanScreen() {
       </div>
 
       {/* Feature cards */}
-      <div className="flex-1 overflow-y-auto" style={{ padding: "16px 16px 32px" }}>
+      <div className="flex-1 overflow-y-auto" style={{ padding: "16px 16px 120px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {FEATURES.map((f) => {
             const Icon = f.icon;

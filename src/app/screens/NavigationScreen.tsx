@@ -209,7 +209,7 @@ export function NavigationScreen() {
   const routeCoords = ROUTE_COORDS[route.id] ?? [];
   const transitColor = TRANSIT_COLORS[route.transit] ?? "#1A6FBF";
 
-  // Ref untuk scroll ke step aktif
+  // Ref untuk scroll ke step aktif (scroll di dalam container, bukan window)
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const stepsContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -225,11 +225,26 @@ export function NavigationScreen() {
     setActiveStepIdx(newIdx);
   }, [animProgress, route.steps.length]);
 
-  // Scroll otomatis ke step aktif
+  // Scroll otomatis ke step aktif — scroll di dalam container scrollable
   useEffect(() => {
     const el = stepRefs.current[activeStepIdx];
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const container = stepsContainerRef.current;
+    if (el && container) {
+      // Cari parent scrollable (flex-1 overflow-y-auto)
+      const scrollParent = container.closest(".overflow-y-auto") as HTMLElement | null;
+      if (scrollParent) {
+        const elTop = el.offsetTop - container.offsetTop;
+        const elBottom = elTop + el.offsetHeight;
+        const viewTop = scrollParent.scrollTop;
+        const viewBottom = viewTop + scrollParent.clientHeight;
+        // Hanya scroll jika step tidak terlihat di layar
+        if (elTop < viewTop || elBottom > viewBottom) {
+          scrollParent.scrollTo({
+            top: elTop - 80,
+            behavior: "smooth",
+          });
+        }
+      }
     }
   }, [activeStepIdx]);
 
